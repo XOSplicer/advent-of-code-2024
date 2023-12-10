@@ -7,6 +7,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
+crossbeam = "0.8.2"
+crossbeam-channel = "0.5.8"
 itertools = "0.12.0"
 ndarray = "0.15.6"
 ndarray-linalg = "0.16.0"
