@@ -1,2 +1,5 @@
 /target
 /input/*-puzzle.txt
+*.data
+*.svg
+
