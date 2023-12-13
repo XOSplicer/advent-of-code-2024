@@ -159,7 +159,9 @@ fn arrangements(record: ConditionRecord) -> usize {
         return 0;
     }
 
-    let mut count = 0_u64;
+    let mut count = 0_usize;
+
+
 
     unimplemented!()
 }
