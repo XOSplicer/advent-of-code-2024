@@ -147,6 +147,18 @@ impl ConditionRecord {
     }
 }
 
+impl DamagedGroups {
+    fn pop_first(self) -> Self {
+        DamagedGroups(self.0.into_iter().skip(1).collect_vec())
+    }
+}
+
+impl SpringStatuses {
+    fn pop_first_group(self, group: usize) -> Self {
+        SpringStatuses(self.0.into_iter().skip(group).collect_vec())
+    }
+}
+
 //#[cached]
 fn arrangements(record: ConditionRecord) -> usize {
     let record = record.trim_operational();
@@ -159,11 +171,48 @@ fn arrangements(record: ConditionRecord) -> usize {
         return 0;
     }
 
-    let mut count = 0_usize;
+    let first = record.springs.0[0];
+    if first == SpringStatus::Damaged {
+        // match first group
+        let first_group_len = record
+            .springs
+            .0
+            .iter()
+            .take_while(|&s| *s == SpringStatus::Damaged || *s == SpringStatus::Unknown)
+            .count();
+        if first_group_len >= record.damaged_groups.0[0] {
+            // pop first group
+            let mut popped_rec = ConditionRecord {
+                damaged_groups: record.damaged_groups.clone().pop_first(),
+                springs: record
+                    .springs
+                    .clone()
+                    .pop_first_group(record.damaged_groups.0[0]),
+            };
 
+            // if it starts with damaged the group was incorrectly popped
+            if popped_rec.springs.0.first() == Some(&SpringStatus::Damaged) {
+                return 0;
+            }
 
+            // force first to be operational, as it may not be damaged, otherwise the group would not have matched
+            if let Some(f) = popped_rec.springs.0.first_mut() {
+                *f = SpringStatus::Operational
+            }
 
-    unimplemented!()
+            return arrangements(popped_rec);
+        } else {
+            return 0;
+        }
+    } else if first == SpringStatus::Unknown {
+        let mut rec1 = record.clone();
+        rec1.springs.0[0] = SpringStatus::Damaged;
+        let mut rec2 = record.clone();
+        rec2.springs.0[0] = SpringStatus::Operational;
+        return arrangements(rec1) + arrangements(rec2);
+    } else {
+        panic!("Unreachable first spring status of Operational")
+    }
 }
 
 impl std::fmt::Display for ConditionRecord {
