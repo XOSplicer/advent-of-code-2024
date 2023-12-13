@@ -85,7 +85,7 @@ fn has_single_axis_symmetry_at(axis: &Vec<Entry>, pos: usize) -> bool {
         return has_single_axis_symmetry_at(&axis_rev, pos_rev);
     }
 
-    dbg!(axis); dbg!(pos); dbg!(axis.len());
+    // dbg!(axis); dbg!(pos); dbg!(axis.len());
 
     let slice = &axis[0..=(2 * pos + 1)];
 
@@ -115,6 +115,7 @@ fn main() -> anyhow::Result<()> {
         .map(|pattern| {
             let row_major = pattern;
             let col_major = pattern.to_col_major();
+            /*
             for v in row_major.0.iter() {
                 for c in v {
                     print!("{}", c);
@@ -128,9 +129,10 @@ fn main() -> anyhow::Result<()> {
                 }
                 println!("");
             }
+            */
             let value = row_major.vertical_line_of_reflection().unwrap_or(0)
                 + col_major.horizontal_line_of_reflection().unwrap_or(0) * 100;
-            println!("{}", value);
+            // println!("{}", value);
             value
         })
         .sum();
