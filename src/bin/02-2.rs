@@ -24,12 +24,6 @@ struct RevealedSet {
     blue: u32,
 }
 
-impl RevealedSet {
-    fn is_valid(&self) -> bool {
-        self.red <= 12 && self.green <= 13 && self.blue <= 14
-    }
-}
-
 #[derive(Debug, Clone)]
 struct Game {
     id: u32,
@@ -37,9 +31,6 @@ struct Game {
 }
 
 impl Game {
-    fn is_valid(&self) -> bool {
-        self.revealed_sets.iter().all(|r| r.is_valid())
-    }
     fn minimal_set(&self) -> MinimalSet {
         let red = self.revealed_sets.iter().map(|s| s.red).max().unwrap();
         let green = self.revealed_sets.iter().map(|s| s.green).max().unwrap();

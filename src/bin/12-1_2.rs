@@ -1,10 +1,6 @@
-use core::fmt;
-
 use anyhow;
 use aoc23;
-
 use itertools::*;
-use rayon::prelude::*;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 enum SpringStatus {
@@ -60,14 +56,10 @@ impl DamagedGroups {
     fn total_damaged(&self) -> usize {
         self.0.iter().sum()
     }
-
-    fn total_operational(&self, len: usize) -> usize {
-        len - self.total_damaged()
-    }
 }
 
-impl fmt::Display for DamagedGroups {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl std::fmt::Display for DamagedGroups {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0.iter().join(","))
     }
 }

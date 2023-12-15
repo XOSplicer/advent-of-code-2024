@@ -45,18 +45,6 @@ impl Location {
             col: self.col - 1,
         }
     }
-    fn add_row(&self, r: isize) -> Location {
-        Location {
-            row: self.row + r,
-            col: self.col,
-        }
-    }
-    fn add_col(&self, c: isize) -> Location {
-        Location {
-            row: self.row,
-            col: self.col + c,
-        }
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

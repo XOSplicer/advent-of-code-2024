@@ -1,7 +1,6 @@
 use anyhow;
 use aoc23;
 use itertools::*;
-use rayon::prelude::*;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 enum Entry {
