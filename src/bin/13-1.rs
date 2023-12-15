@@ -1,6 +1,3 @@
-use core::fmt;
-use std::{fmt::write, path::Display};
-
 use anyhow;
 use aoc23;
 use itertools::*;

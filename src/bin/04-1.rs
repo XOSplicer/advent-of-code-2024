@@ -2,7 +2,6 @@ use std::collections::HashSet;
 
 use anyhow;
 use aoc23;
-use itertools::*;
 
 struct Card {
     id: u32,

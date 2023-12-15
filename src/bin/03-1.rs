@@ -106,7 +106,7 @@ impl Numbers {
                 let groups = s
                     .chars()
                     .enumerate()
-                    .group_by(|(col, c)| c.is_ascii_digit());
+                    .group_by(|(_col, c)| c.is_ascii_digit());
                 let mut line_numbers = HashMap::new();
                 for group in groups
                     .into_iter()

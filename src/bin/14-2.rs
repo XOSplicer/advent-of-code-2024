@@ -1,6 +1,6 @@
 use std::collections::hash_map::DefaultHasher;
+use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
-use std::{collections::HashMap, fmt, fmt::write, path::Display};
 
 use anyhow;
 use aoc23;
@@ -127,7 +127,7 @@ impl ColMajorPattern {
 
 fn vec_tilt_to_start(v: &mut Vec<Entry>) {
     let orig = v.clone();
-    for (orig_idx, e) in orig
+    for (orig_idx, _e) in orig
         .into_iter()
         .enumerate()
         .filter(|&(_, e)| e == Entry::Round)
@@ -233,7 +233,7 @@ fn main() -> anyhow::Result<()> {
             break;
         }
         hashlist.push(&pattern);
-        if (current_iteration % 1_000_000 == 0) {
+        if current_iteration % 1_000_000 == 0 {
             println!("progress {} / 1000", current_iteration / 1000000);
         }
     }

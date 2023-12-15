@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow;
 use aoc23;
 use itertools::*;

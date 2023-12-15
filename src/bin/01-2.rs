@@ -1,6 +1,5 @@
 use anyhow;
 use aoc23;
-use itertools::*;
 
 fn parse_digit(s: &str) -> Option<u32> {
     if s.starts_with("one") || s.starts_with("1") {

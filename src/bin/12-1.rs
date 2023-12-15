@@ -1,5 +1,3 @@
-use std::path::Display;
-
 use anyhow;
 use aoc23;
 use itertools::*;
@@ -164,7 +162,7 @@ impl ConditionRecord {
             .possible_arrangements(self.springs.0.len())
             .into_iter()
             .filter(|a| self.is_valid_arrangement(a))
-            .inspect(|a| {
+            .inspect(|_a| {
                 // println!(
                 //     "matched {} vs {} for {:?}",
                 //     self.springs, a, self.damaged_groups

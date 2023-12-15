@@ -1,6 +1,5 @@
 use anyhow;
 use aoc23;
-use itertools::*;
 
 fn hash(s: &str) -> u64 {
     assert!(s.is_ascii());

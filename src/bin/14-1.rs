@@ -1,5 +1,3 @@
-use std::{fmt, fmt::write, path::Display};
-
 use anyhow;
 use aoc23;
 use itertools::*;
@@ -92,7 +90,7 @@ impl ColMajorPattern {
 
     fn col_tilt_north(col: &mut Vec<Entry>) {
         let orig = col.clone();
-        for (orig_idx, e) in orig
+        for (orig_idx, _e) in orig
             .into_iter()
             .enumerate()
             .filter(|&(_, e)| e == Entry::Round)

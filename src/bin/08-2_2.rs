@@ -151,10 +151,14 @@ fn main() -> anyhow::Result<()> {
         // v is (n1, n2, ... nn) with each nj < i
         println!("iteration: {}", i);
         for v in start_nodes.iter().map(|_| (0..i)).multi_cartesian_product() {
-            if let Ok(solution) = first_end_nodes.iter().zip(v).map(|(
-                (&start_node, (end_node, initial_steps)), vn)| {
-                initial_steps + vn * end_to_self_cycle_steps.get(end_node).unwrap()
-            }).all_equal_value() {
+            if let Ok(solution) = first_end_nodes
+                .iter()
+                .zip(v)
+                .map(|((&_start_node, (end_node, initial_steps)), vn)| {
+                    initial_steps + vn * end_to_self_cycle_steps.get(end_node).unwrap()
+                })
+                .all_equal_value()
+            {
                 println!("solution: {}", solution);
                 return Ok(());
             }

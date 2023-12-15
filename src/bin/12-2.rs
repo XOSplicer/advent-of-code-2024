@@ -1,5 +1,4 @@
 use core::fmt;
-use std::{fmt::write, path::Display};
 
 use anyhow;
 use aoc23;
@@ -43,7 +42,6 @@ struct SpringStatuses(Vec<SpringStatus>);
 
 impl std::fmt::Display for SpringStatuses {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        use SpringStatus::*;
         for s in &self.0 {
             s.fmt(f)?;
         }

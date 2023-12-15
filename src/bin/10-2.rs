@@ -252,8 +252,8 @@ impl Map {
                     .enumerate()
                     .map(move |(col, tile)| (row, col, tile))
             })
-            .find(|(row, col, &tile)| tile == Tile::Start)
-            .map(|(row, col, tile)| Location {
+            .find(|(_row, _col, &tile)| tile == Tile::Start)
+            .map(|(row, col, _tile)| Location {
                 row: row as isize,
                 col: col as isize,
             })
@@ -289,10 +289,10 @@ impl Map {
                 Some(Tile::Ground) => return None,
                 Some(Tile::Start) => return Some(trail),
                 Some(Tile::Pipe(Pipe {
-                    kind,
+                    kind: _,
                     con_1,
                     con_2,
-                    loc: pipe_loc,
+                    loc: _pipe_loc,
                 })) => {
                     let last_loc = *trail.last().unwrap();
                     if con_1 == last_loc {

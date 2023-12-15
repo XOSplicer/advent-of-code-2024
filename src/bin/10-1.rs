@@ -126,8 +126,8 @@ impl Map {
                     .enumerate()
                     .map(move |(col, tile)| (row, col, tile))
             })
-            .find(|(row, col, &tile)| tile == Tile::Start)
-            .map(|(row, col, tile)| Location {
+            .find(|(_row, _col, &tile)| tile == Tile::Start)
+            .map(|(row, col, _tile)| Location {
                 row: row as isize,
                 col: col as isize,
             })
@@ -154,7 +154,11 @@ impl Map {
                 None => return None,
                 Some(Tile::Ground) => return None,
                 Some(Tile::Start) => return Some(trail),
-                Some(Tile::Pipe { kind, con_1, con_2 }) => {
+                Some(Tile::Pipe {
+                    kind: _,
+                    con_1,
+                    con_2,
+                }) => {
                     let last_loc = *trail.last().unwrap();
                     if con_1 == last_loc {
                         trail.push(loc);

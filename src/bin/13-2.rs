@@ -1,6 +1,3 @@
-use core::fmt;
-use std::{fmt::write, path::Display};
-
 use anyhow;
 use aoc23;
 use itertools::*;
@@ -177,7 +174,7 @@ fn main() -> anyhow::Result<()> {
 
             let (new_value, new_pattern) = smudge_patter_iter(&pattern)
                 .map(|smudged| (pattern_value(&smudged, ignore_row, ignore_col), smudged))
-                .inspect(|(v, p)| {
+                .inspect(|(v, _p)| {
                     dbg!(v);
                 })
                 .filter(|&(v, _)| v > 0 && v != original_value)
@@ -189,10 +186,10 @@ fn main() -> anyhow::Result<()> {
             let new_row = new_value % 100;
             let new_col = new_value / 100;
 
-            let fixed_row = if (orig_row == new_row) { 0 } else { new_row };
-            let fixed_col = if (orig_col == new_col) { 0 } else { new_col };
+            let fixed_row = if orig_row == new_row { 0 } else { new_row };
+            let fixed_col = if orig_col == new_col { 0 } else { new_col };
 
-            let mut fixed_value = 100 * fixed_col + fixed_row;
+            let fixed_value = 100 * fixed_col + fixed_row;
             dbg!(fixed_value);
             println!("---------------");
             fixed_value

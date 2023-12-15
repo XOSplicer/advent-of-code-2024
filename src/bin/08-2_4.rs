@@ -3,8 +3,6 @@ use std::collections::HashMap;
 use anyhow;
 use aoc23;
 use itertools::*;
-use ndarray::prelude::*;
-use ndarray_linalg::Solve;
 
 #[derive(Debug, Clone, Copy)]
 enum Instr {
@@ -136,7 +134,7 @@ fn main() -> anyhow::Result<()> {
         "End elements cycle through multple ends, cant calc"
     );
 
-    let end_to_self_cycle_steps: HashMap<&str, u64> = end_to_end
+    let _end_to_self_cycle_steps: HashMap<&str, u64> = end_to_end
         .clone()
         .into_iter()
         .map(|(k, (_, s))| (k, s))
