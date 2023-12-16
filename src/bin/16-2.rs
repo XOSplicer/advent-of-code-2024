@@ -3,7 +3,6 @@ use std::collections::{HashMap, HashSet};
 use anyhow;
 use aoc23;
 use itertools::*;
-use rayon::vec;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 enum EntryKind {
