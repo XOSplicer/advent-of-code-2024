@@ -29,15 +29,6 @@ impl EntryKind {
             _ => panic!("invalid entry: {}", c),
         }
     }
-    fn to_char(&self) -> char {
-        match *self {
-            EntryKind::Empty => '.',
-            EntryKind::LeftMirror => '\\',
-            EntryKind::RightMirror => '/',
-            EntryKind::HorizontalSplitter => '-',
-            EntryKind::VerticalSplitter => '|',
-        }
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -160,10 +151,6 @@ impl EntryKind {
 }
 
 impl Pattern {
-    fn has_location(&self, loc: &Location) -> bool {
-        loc.col >= 0 && loc.col < self.cols && loc.row >= 0 && loc.row < self.rows
-    }
-
     fn step(&self, step: LightStep) -> StepResult {
         let location = step.location.apply(step.direction);
         if let Some(entry) = self.inner.get(&location) {

@@ -138,9 +138,6 @@ impl Numbers {
 }
 
 impl Symbols {
-    fn get(&self, line: usize, col: usize) -> Option<&Symbol> {
-        self.inner.get(&line).and_then(|m| m.get(&col))
-    }
     fn iter(&self) -> impl Iterator<Item = &Symbol> {
         self.inner.values().flat_map(|m| m.values())
     }

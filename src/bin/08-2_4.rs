@@ -171,5 +171,4 @@ fn main() -> anyhow::Result<()> {
     */
 
     //println!("{}", steps);
-    Ok(())
 }

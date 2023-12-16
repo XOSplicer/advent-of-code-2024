@@ -4,7 +4,6 @@ use anyhow;
 use aoc23;
 use cached::proc_macro::cached;
 use itertools::*;
-use rayon::prelude::*;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 enum SpringStatus {
@@ -59,10 +58,6 @@ impl DamagedGroups {
 
     fn total_damaged(&self) -> usize {
         self.0.iter().sum()
-    }
-
-    fn total_operational(&self, len: usize) -> usize {
-        len - self.total_damaged()
     }
 }
 

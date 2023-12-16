@@ -77,7 +77,7 @@ struct RangeMap {
 impl RangeMap {
     fn from_lines(lines: &mut impl Iterator<Item = String>) -> Self {
         let title = lines.next().unwrap();
-        let mut categories = title.split_whitespace().next().unwrap().clone().split('-');
+        let mut categories = title.split_whitespace().next().unwrap().split('-');
         let from_category = categories.next().unwrap().to_owned();
         categories.next(); // skip 'to'
         let to_category = categories.next().unwrap().to_owned();

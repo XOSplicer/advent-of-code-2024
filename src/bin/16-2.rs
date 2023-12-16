@@ -160,10 +160,6 @@ impl EntryKind {
 }
 
 impl Pattern {
-    fn has_location(&self, loc: &Location) -> bool {
-        loc.col >= 0 && loc.col < self.cols && loc.row >= 0 && loc.row < self.rows
-    }
-
     fn step(&self, step: LightStep) -> StepResult {
         let location = step.location.apply(step.direction);
         if let Some(entry) = self.inner.get(&location) {
@@ -211,19 +207,19 @@ fn main() -> anyhow::Result<()> {
     let lines = aoc23::read_input_lines();
     let pattern = Pattern::from_lines(lines);
 
-    let left_side = (0..pattern.rows).map(|(row)| LightStep {
+    let left_side = (0..pattern.rows).map(|row| LightStep {
         location: Location::new(row, -1),
         direction: Direction::Right,
     });
-    let right_side = (0..pattern.rows).map(|(row)| LightStep {
+    let right_side = (0..pattern.rows).map(|row| LightStep {
         location: Location::new(row, pattern.cols),
         direction: Direction::Left,
     });
-    let up_side = (0..pattern.cols).map(|(col)| LightStep {
+    let up_side = (0..pattern.cols).map(|col| LightStep {
         location: Location::new(-1, col),
         direction: Direction::Down,
     });
-    let down_side = (0..pattern.cols).map(|(col)| LightStep {
+    let down_side = (0..pattern.cols).map(|col| LightStep {
         location: Location::new(pattern.rows, col),
         direction: Direction::Up,
     });
@@ -233,7 +229,8 @@ fn main() -> anyhow::Result<()> {
         .chain(up_side)
         .chain(down_side)
         .map(|start_step| count_energized(&pattern, start_step))
-        .max().unwrap();
+        .max()
+        .unwrap();
 
     println!("{}", max);
     Ok(())
