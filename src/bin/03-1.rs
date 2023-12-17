@@ -1,5 +1,6 @@
 use anyhow;
 use aoc23;
+use aoc23::Location;
 use itertools::*;
 use std::collections::HashMap;
 
@@ -24,12 +25,6 @@ struct Number {
     col_end_incl: usize,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-struct Location {
-    row: usize,
-    col: usize,
-}
-
 impl Number {
     fn adjacent_locations(&self) -> impl Iterator<Item = Location> {
         let mut locations = Vec::with_capacity(8);
@@ -37,32 +32,20 @@ impl Number {
         // line above
         if self.row > 0 {
             for col in self.col_start.saturating_sub(1)..=self.col_end_incl.saturating_add(1) {
-                locations.push(Location {
-                    row: self.row - 1,
-                    col,
-                });
+                locations.push(Location::new_usize(self.row - 1, col));
             }
         }
 
         // line below
         for col in self.col_start.saturating_sub(1)..=self.col_end_incl.saturating_add(1) {
-            locations.push(Location {
-                row: self.row + 1,
-                col,
-            });
+            locations.push(Location::new_usize(self.row + 1, col));
         }
 
         // same line
         if self.col_start > 0 {
-            locations.push(Location {
-                row: self.row,
-                col: self.col_start - 1,
-            });
+            locations.push(Location::new_usize(self.row, self.col_start - 1));
         }
-        locations.push(Location {
-            row: self.row,
-            col: self.col_end_incl + 1,
-        });
+        locations.push(Location::new_usize(self.row, self.col_end_incl + 1));
 
         locations.into_iter()
     }
@@ -155,7 +138,7 @@ fn main() -> anyhow::Result<()> {
         .filter_map(|number| {
             if number
                 .adjacent_locations()
-                .any(|loc| symbols.get(loc.row, loc.col).is_some())
+                .any(|loc| symbols.get(loc.row as usize, loc.col as usize).is_some())
             {
                 Some(number.value)
             } else {
