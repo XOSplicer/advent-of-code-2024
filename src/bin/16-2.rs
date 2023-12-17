@@ -30,15 +30,6 @@ impl EntryKind {
             _ => panic!("invalid entry: {}", c),
         }
     }
-    fn to_char(&self) -> char {
-        match *self {
-            EntryKind::Empty => '.',
-            EntryKind::LeftMirror => '\\',
-            EntryKind::RightMirror => '/',
-            EntryKind::HorizontalSplitter => '-',
-            EntryKind::VerticalSplitter => '|',
-        }
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

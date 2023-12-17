@@ -4,7 +4,6 @@ use anyhow;
 use aoc23;
 
 struct Card {
-    id: u32,
     winning_numbers: HashSet<u32>,
     card_numbers: HashSet<u32>,
 }
@@ -12,7 +11,7 @@ struct Card {
 impl Card {
     fn from_line(line: &str) -> Card {
         let mut parts = line.split(':');
-        let id: u32 = parts
+        let _id: u32 = parts
             .next()
             .unwrap()
             .strip_prefix("Card")
@@ -36,7 +35,6 @@ impl Card {
             .map(|s| s.parse().unwrap())
             .collect();
         Card {
-            id,
             winning_numbers,
             card_numbers,
         }

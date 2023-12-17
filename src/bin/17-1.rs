@@ -144,12 +144,12 @@ fn graph_from_pattern(pattern: &Pattern) -> GraphResult {
     }
 
     // add Start node with 0 edges to initial nodes
-    for (node_i, idx_i) in initial_nodes(pattern).map(|n| (n, idxs.get(&n).unwrap())) {
+    for (_node_i, idx_i) in initial_nodes(pattern).map(|n| (n, idxs.get(&n).unwrap())) {
         graph.add_edge(start_idx, *idx_i, 0);
     }
 
     // add End node with 0 edges from final nodes
-    for (node_f, idx_f) in final_nodes(pattern).map(|n| (n, idxs.get(&n).unwrap())) {
+    for (_node_f, idx_f) in final_nodes(pattern).map(|n| (n, idxs.get(&n).unwrap())) {
         graph.add_edge(*idx_f, end_idx, 0);
     }
 
@@ -157,7 +157,6 @@ fn graph_from_pattern(pattern: &Pattern) -> GraphResult {
         graph,
         start_idx,
         end_idx,
-        idxs,
     }
 }
 
@@ -166,7 +165,6 @@ struct GraphResult {
     graph: DiGraph<GraphNode, Heat>,
     start_idx: NodeIndex,
     end_idx: NodeIndex,
-    idxs: HashMap<Node, NodeIndex>,
 }
 
 fn main() -> anyhow::Result<()> {

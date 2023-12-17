@@ -177,7 +177,6 @@ fn graph_from_pattern(pattern: &Pattern, min_step: usize, max_step: usize) -> Gr
         graph,
         start_idx,
         end_idx,
-        idxs,
     }
 }
 
@@ -186,7 +185,6 @@ struct GraphResult {
     graph: DiGraph<GraphNode, Heat>,
     start_idx: NodeIndex,
     end_idx: NodeIndex,
-    idxs: HashMap<Node, NodeIndex>,
 }
 
 fn main() -> anyhow::Result<()> {

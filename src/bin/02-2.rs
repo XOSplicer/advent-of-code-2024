@@ -26,7 +26,6 @@ struct RevealedSet {
 
 #[derive(Debug, Clone)]
 struct Game {
-    id: u32,
     revealed_sets: Vec<RevealedSet>,
 }
 
@@ -43,7 +42,7 @@ impl FromStr for Game {
     type Err = anyhow::Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut parts = s.split(':');
-        let id: u32 = parts
+        let _id: u32 = parts
             .next()
             .ok_or(anyhow::anyhow!("Game id not found"))?
             .strip_prefix("Game")
@@ -57,7 +56,7 @@ impl FromStr for Game {
             .map(|r| r.trim())
             .map(|r| r.parse().unwrap())
             .collect_vec();
-        Ok(Game { id, revealed_sets })
+        Ok(Game { revealed_sets })
     }
 }
 

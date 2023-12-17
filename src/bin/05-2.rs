@@ -69,8 +69,8 @@ impl RangeMapPart {
 
 #[derive(Debug, Clone)]
 struct RangeMap {
-    from_category: String,
-    to_category: String,
+    // from_category: String,
+    // to_category: String,
     ranges: Vec<RangeMapPart>,
 }
 
@@ -78,9 +78,9 @@ impl RangeMap {
     fn from_lines(lines: &mut impl Iterator<Item = String>) -> Self {
         let title = lines.next().unwrap();
         let mut categories = title.split_whitespace().next().unwrap().split('-');
-        let from_category = categories.next().unwrap().to_owned();
+        let _from_category = categories.next().unwrap().to_owned();
         categories.next(); // skip 'to'
-        let to_category = categories.next().unwrap().to_owned();
+        let _to_category = categories.next().unwrap().to_owned();
         let mut ranges = Vec::new();
         while let Some(line) = lines.next() {
             if line.is_empty() {
@@ -89,8 +89,8 @@ impl RangeMap {
             ranges.push(RangeMapPart::from_line(&line));
         }
         RangeMap {
-            from_category,
-            to_category,
+            // from_category,
+            // to_category,
             ranges,
         }
     }
