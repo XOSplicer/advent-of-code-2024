@@ -6,27 +6,27 @@ use std::collections::HashMap;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct Symbol {
     symbol: char,
-    line: usize,
+    row: usize,
     col: usize,
 }
 
 impl Symbol {
-    fn new(symbol: char, line: usize, col: usize) -> Symbol {
-        Symbol { symbol, line, col }
+    fn new(symbol: char, row: usize, col: usize) -> Symbol {
+        Symbol { symbol, row, col }
     }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct Number {
     value: u32,
-    line: usize,
+    row: usize,
     col_start: usize,
     col_end_incl: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct Location {
-    line: usize,
+    row: usize,
     col: usize,
 }
 
@@ -35,10 +35,10 @@ impl Number {
         let mut locations = Vec::with_capacity(8);
 
         // line above
-        if self.line > 0 {
+        if self.row > 0 {
             for col in self.col_start.saturating_sub(1)..=self.col_end_incl.saturating_add(1) {
                 locations.push(Location {
-                    line: self.line - 1,
+                    row: self.row - 1,
                     col,
                 });
             }
@@ -47,7 +47,7 @@ impl Number {
         // line below
         for col in self.col_start.saturating_sub(1)..=self.col_end_incl.saturating_add(1) {
             locations.push(Location {
-                line: self.line + 1,
+                row: self.row + 1,
                 col,
             });
         }
@@ -55,12 +55,12 @@ impl Number {
         // same line
         if self.col_start > 0 {
             locations.push(Location {
-                line: self.line,
+                row: self.row,
                 col: self.col_start - 1,
             });
         }
         locations.push(Location {
-            line: self.line,
+            row: self.row,
             col: self.col_end_incl + 1,
         });
 
@@ -78,14 +78,14 @@ impl Symbols {
         let symbols: HashMap<usize, HashMap<usize, Symbol>> = lines
             .into_iter()
             .enumerate()
-            .map(|(line, s)| {
-                let line_symbols = s
+            .map(|(row, s)| {
+                let row_symbols = s
                     .chars()
                     .enumerate()
                     .filter(|(_, c)| !c.is_ascii_digit() && c != &'.')
-                    .map(|(col, c)| (col, Symbol::new(c, line, col)))
+                    .map(|(col, c)| (col, Symbol::new(c, row, col)))
                     .collect();
-                (line, line_symbols)
+                (row, row_symbols)
             })
             .collect();
         Symbols { inner: symbols }
@@ -102,12 +102,12 @@ impl Numbers {
         let numbers: HashMap<usize, HashMap<usize, Number>> = lines
             .into_iter()
             .enumerate()
-            .map(|(line, s)| {
+            .map(|(row, s)| {
                 let groups = s
                     .chars()
                     .enumerate()
                     .group_by(|(_col, c)| c.is_ascii_digit());
-                let mut line_numbers = HashMap::new();
+                let mut row_numbers = HashMap::new();
                 for group in groups
                     .into_iter()
                     .filter(|(key, _)| *key)
@@ -125,12 +125,12 @@ impl Numbers {
                         value: number_val,
                         col_start,
                         col_end_incl,
-                        line,
+                        row,
                     };
-                    line_numbers.insert(col_start, number);
+                    row_numbers.insert(col_start, number);
                 }
 
-                (line, line_numbers)
+                (row, row_numbers)
             })
             .collect();
         Numbers { inner: numbers }
@@ -172,7 +172,7 @@ impl Symbol {
     ) -> impl Iterator<Item = &'a Number> + 's {
         numbers.iter().filter(|n| {
             n.adjacent_locations()
-                .any(|loc| loc.line == self.line && loc.col == self.col)
+                .any(|loc| loc.row == self.row && loc.col == self.col)
         })
     }
 }
