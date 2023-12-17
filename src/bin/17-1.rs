@@ -2,72 +2,9 @@ use std::collections::HashMap;
 
 use anyhow;
 use aoc23;
+use aoc23::{Direction as Dir, Location};
 use itertools::*;
 use petgraph::{algo::dijkstra, prelude::*};
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-struct Location {
-    row: isize,
-    col: isize,
-}
-
-impl Location {
-    fn new(row: isize, col: isize) -> Self {
-        Location { row, col }
-    }
-    fn up(&self) -> Location {
-        Location {
-            row: self.row - 1,
-            col: self.col,
-        }
-    }
-    fn down(&self) -> Location {
-        Location {
-            row: self.row + 1,
-            col: self.col,
-        }
-    }
-    fn right(&self) -> Location {
-        Location {
-            row: self.row,
-            col: self.col + 1,
-        }
-    }
-    fn left(&self) -> Location {
-        Location {
-            row: self.row,
-            col: self.col - 1,
-        }
-    }
-    fn apply(&self, dir: Dir) -> Self {
-        match dir {
-            Dir::Up => self.up(),
-            Dir::Down => self.down(),
-            Dir::Right => self.right(),
-            Dir::Left => self.left(),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-enum Dir {
-    Up,
-    Down,
-    Right,
-    Left,
-}
-
-impl Dir {
-    fn rev(&self) -> Dir {
-        use Dir::*;
-        match self {
-            Up => Down,
-            Down => Up,
-            Right => Left,
-            Left => Right,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 /// d_-2 d_-1 d_0

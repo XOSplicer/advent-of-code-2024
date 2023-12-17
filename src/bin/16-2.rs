@@ -2,6 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use anyhow;
 use aoc23;
+use aoc23::{Direction, Location};
 use itertools::*;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
@@ -38,58 +39,6 @@ impl EntryKind {
             EntryKind::VerticalSplitter => '|',
         }
     }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-struct Location {
-    row: isize,
-    col: isize,
-}
-
-impl Location {
-    fn new(row: isize, col: isize) -> Self {
-        Location { row, col }
-    }
-    fn up(&self) -> Location {
-        Location {
-            row: self.row - 1,
-            col: self.col,
-        }
-    }
-    fn down(&self) -> Location {
-        Location {
-            row: self.row + 1,
-            col: self.col,
-        }
-    }
-    fn right(&self) -> Location {
-        Location {
-            row: self.row,
-            col: self.col + 1,
-        }
-    }
-    fn left(&self) -> Location {
-        Location {
-            row: self.row,
-            col: self.col - 1,
-        }
-    }
-    fn apply(&self, dir: Direction) -> Self {
-        match dir {
-            Direction::Up => self.up(),
-            Direction::Down => self.down(),
-            Direction::Right => self.right(),
-            Direction::Left => self.left(),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-enum Direction {
-    Up,
-    Down,
-    Right,
-    Left,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

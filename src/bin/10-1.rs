@@ -1,5 +1,6 @@
 use anyhow;
 use aoc23;
+use aoc23::Location;
 use itertools::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -12,39 +13,6 @@ enum PipeKind {
     NorthToWest,
     SouthToEast,
     SouthToWest,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct Location {
-    row: isize,
-    col: isize,
-}
-
-impl Location {
-    fn north(&self) -> Location {
-        Location {
-            row: self.row - 1,
-            col: self.col,
-        }
-    }
-    fn south(&self) -> Location {
-        Location {
-            row: self.row + 1,
-            col: self.col,
-        }
-    }
-    fn east(&self) -> Location {
-        Location {
-            row: self.row,
-            col: self.col + 1,
-        }
-    }
-    fn west(&self) -> Location {
-        Location {
-            row: self.row,
-            col: self.col - 1,
-        }
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
