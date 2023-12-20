@@ -2,4 +2,5 @@
 /input/*-puzzle.txt
 *.data
 *.svg
-
+*.data.old
+*.pdf
