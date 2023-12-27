@@ -284,6 +284,10 @@ impl FilledCubes {
             .iter()
             .flat_map(|(xy, m)| m.iter().map(|(&z, &id)| (xy.with_z(z), id)))
     }
+
+    fn len(&self) -> usize {
+        self.inner.values().map(|m| m.values().count()).sum()
+    }
 }
 
 fn fall_brick(brick: &Brick, filled_cubes: &mut FilledCubes) -> Brick {
@@ -385,17 +389,18 @@ fn main() -> anyhow::Result<()> {
     let snapshot = parse(lines);
 
     let bricks = snapshot.values().copied().collect_vec();
-    println!("Snapshot:");
-    for b in &bricks {
-        println!("{:?}: {:?}", b.id, b.shape);
-    }
+    println!("Snapshot ({} bricks):", bricks.len());
+    // for b in &bricks {
+    //     println!("{:?}: {:?}", b.id, b.shape);
+    // }
 
     let (fallen_bricks, filled_cubes) = fall_bricks(bricks);
-    println!("Fallen:");
-    for b in &fallen_bricks {
-        println!("{:?}: {:?}", b.id, b.shape);
-    }
-    dbg!(&filled_cubes);
+    println!("Fallen ({} bricks):", fallen_bricks.len());
+    // for b in &fallen_bricks {
+    //     println!("{:?}: {:?}", b.id, b.shape);
+    // }
+    println!("Filled cubes ({} cubes):", filled_cubes.len());
+    // dbg!(&filled_cubes);
 
     let support_graph = support_graph(&filled_cubes);
     println!(
@@ -403,11 +408,11 @@ fn main() -> anyhow::Result<()> {
         support_graph.graph.node_count(),
         support_graph.graph.edge_count()
     );
-    println!(
-        "{:?}",
-        Dot::with_config(&support_graph.graph, &[DotConfig::EdgeNoLabel])
-    );
-    println!("\n\n");
+    // println!(
+    //     "{:?}",
+    //     Dot::with_config(&support_graph.graph, &[DotConfig::EdgeNoLabel])
+    // );
+    // println!("\n\n");
 
     let sum: u32 = removable_bricks(&support_graph);
     println!("{}", sum);
