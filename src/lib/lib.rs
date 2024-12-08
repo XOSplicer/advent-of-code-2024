@@ -332,6 +332,18 @@ impl Direction {
     }
 }
 
+impl Into<Distance> for Direction {
+    fn into(self) -> Distance {
+        use Direction::*;
+        match self {
+            Up => Distance::new(-1, 0),
+            Down => Distance::new(1, 0),
+            Right => Distance::new(0, 1),
+            Left => Distance::new(0, -1),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Distance {
     pub row: isize,
