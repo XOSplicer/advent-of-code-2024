@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
                 .enumerate()
                 .map(move |(c_nr, cha)| (l_nr, c_nr, cha))
         })
-        .filter(|(l_nr, c_nr, cha)| *cha != '.');
+        .filter(|(_l_nr, _c_nr, cha)| *cha != '.');
 
     for (l_nr, c_nr, cha) in antennas {
         location_map

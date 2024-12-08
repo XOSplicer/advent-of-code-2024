@@ -1,13 +1,12 @@
-use std::collections::{HashMap, HashSet};
 
 use anyhow;
-use aoc24::{self, Location};
+use aoc24::{self};
 use itertools::*;
 
 fn main() -> anyhow::Result<()> {
     let lines = aoc24::read_input_lines();
 
-    let (mut l1, mut l2) = lines
+    let (l1, l2) = lines
         .map(|line| {
             let mut parts = line.trim().split_whitespace();
             let n1: i32 = parts.next().unwrap().parse().unwrap();

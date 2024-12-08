@@ -1,7 +1,6 @@
-use std::collections::{HashMap, HashSet};
 
 use anyhow;
-use aoc24::{self, Location};
+use aoc24::{self};
 use itertools::*;
 
 fn original_save(report: &[i32]) -> bool {
@@ -23,7 +22,7 @@ fn tolerated_save(report: &[i32]) -> bool {
         let fixed_report = report
             .iter()
             .enumerate()
-            .filter(|(idx, n)| *idx != i)
+            .filter(|(idx, _)| *idx != i)
             .map(|(_, n)| *n)
             .collect_vec();
 

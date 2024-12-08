@@ -1,8 +1,6 @@
-use std::collections::{HashMap, HashSet};
 
 use anyhow;
-use aoc24::{self, Location};
-use itertools::*;
+use aoc24::{self};
 
 fn main() -> anyhow::Result<()> {
     let lines = aoc24::read_input_lines();
