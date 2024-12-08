@@ -28,17 +28,11 @@ pub struct Location {
     pub col: isize,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Distance {
-    pub row: isize,
-    pub col: isize,
-}
-
 impl Location {
     /// Create a new location at (row, col)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location, Location { row: 1, col: 1});
     /// ```
@@ -52,7 +46,7 @@ impl Location {
     /// panics if row or col can not be converted to usize
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new_usize(1, 1);
     /// assert_eq!(location, Location { row: 1, col: 1});
     /// ```
@@ -67,7 +61,7 @@ impl Location {
     /// Create a new location at (row-1, col)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.up(), Location { row: 0, col: 1});
     /// ```
@@ -82,7 +76,7 @@ impl Location {
     /// Create a new location at (row+1, col)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.down(), Location { row: 2, col: 1});
     /// ```
@@ -97,7 +91,7 @@ impl Location {
     /// Create a new location at (row, col+1)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.right(), Location { row: 1, col: 2});
     /// ```
@@ -112,7 +106,7 @@ impl Location {
     /// Create a new location at (row, col-1)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.left(), Location { row: 1, col: 0});
     /// ```
@@ -127,7 +121,7 @@ impl Location {
     /// Create a new location at (row-1, col)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.north(), Location { row: 0, col: 1});
     /// ```
@@ -139,7 +133,7 @@ impl Location {
     /// Create a new location at (row+1, col)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.south(), Location { row: 2, col: 1});
     /// ```
@@ -151,7 +145,7 @@ impl Location {
     /// Create a new location at (row, col+1)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.east(), Location { row: 1, col: 2});
     /// ```
@@ -163,7 +157,7 @@ impl Location {
     /// Create a new location at (row, col-1)
     ///
     /// ```
-    /// # use aoc23::Location;
+    /// # use aoc24::Location;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.west(), Location { row: 1, col: 0});
     /// ```
@@ -182,8 +176,8 @@ impl Location {
     /// Create a new location at one step in the given direction
     ///
     /// ```
-    /// # use aoc23::Location;
-    /// # use aoc23::Direction;
+    /// # use aoc24::Location;
+    /// # use aoc24::Direction;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.apply(Direction::Up), Location { row: 0, col: 1});
     /// ```
@@ -201,8 +195,8 @@ impl Location {
     /// Create a new location at `n` steps in the given direction
     ///
     /// ```
-    /// # use aoc23::Location;
-    /// # use aoc23::Direction;
+    /// # use aoc24::Location;
+    /// # use aoc24::Direction;
     /// let location = Location::new(1, 1);
     /// assert_eq!(location.apply_n(Direction::Down, 3), Location { row: 4, col: 1});
     /// ```
@@ -215,6 +209,14 @@ impl Location {
         s
     }
 
+    /// Create a new location  in the given distance by vector addition
+    ///
+    /// ```
+    /// # use aoc24::Location;
+    /// # use aoc24::Distance;
+    /// let location = Location::new(1, 1);
+    /// let distance = Distance::new(-3, 1);
+    /// assert_eq!(location.apply_distance(&distance), Location { row: -2, col: 2});
     #[inline(always)]
     pub fn apply_distance(&self, dis: &Distance) -> Self {
         Location {
@@ -223,12 +225,40 @@ impl Location {
         }
     }
 
+    /// Create a new location in n times the given distance by vector addition
+    ///
+    /// ```
+    /// # use aoc24::Location;
+    /// # use aoc24::Distance;
+    /// let location = Location::new(1, 1);
+    /// let distance = Distance::new(-3, 1);
+    /// assert_eq!(location.apply_n_distance(&distance, 2), Location { row: -5, col: 3});
     #[inline(always)]
     pub fn apply_n_distance(&self, dis: &Distance, n: isize) -> Self {
         Location {
             row: self.row + dis.row * n,
             col: self.col + dis.col * n,
         }
+    }
+
+    /// Check if the location is inside the bounding box formed by the rectangle
+    /// that includes upper_left and lower_right as its corners (inclusive).
+    ///
+    /// # use aoc24::Location;
+    /// # use aoc24::Distance;
+    /// let location = Location::new(1, 1);
+    /// assert!(location.is_inside_bounding_box(
+    ///     &Location::new(0, 0), &Location::new(2, 2)));
+    /// assert!(location.is_inside_bounding_box(
+    ///     &Location::new(-1, -1), &Location::new(1, 1)));
+    /// assert!(location.is_inside_bounding_box(
+    ///     &Location::new(1, 1), &Location::new(2, 2)));
+    #[inline(always)]
+    pub fn is_inside_bounding_box(&self, upper_left: &Location, lower_right: &Location) -> bool {
+        self.row >= upper_left.row
+            && self.row <= lower_right.row
+            && self.col >= upper_left.col
+            && self.col <= lower_right.col
     }
 }
 
@@ -284,7 +314,7 @@ impl Direction {
     /// Reverse the direction.
     ///
     /// ```
-    /// # use aoc23::Direction;
+    /// # use aoc24::Direction;
     /// assert_eq!(Direction::Up.rev(), Direction::Down);
     /// assert_eq!(Direction::Down.rev(), Direction::Up);
     /// assert_eq!(Direction::Left.rev(), Direction::Right);
@@ -299,5 +329,25 @@ impl Direction {
             Right => Left,
             Left => Right,
         }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Distance {
+    pub row: isize,
+    pub col: isize,
+}
+
+impl Distance {
+    /// Create a new location at (row, col)
+    ///
+    /// ```
+    /// # use aoc24::Distance;
+    /// let distance = Distance::new(-1, 1);
+    /// assert_eq!(distance, Distance { row: -1, col: 1});
+    /// ```
+    #[inline(always)]
+    pub fn new(row: isize, col: isize) -> Self {
+        Distance { row, col }
     }
 }

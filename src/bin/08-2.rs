@@ -7,24 +7,34 @@ use itertools::*;
 fn main() -> anyhow::Result<()> {
     let lines = aoc24::read_input_lines().collect::<Vec<_>>();
     let max_line = lines.len() as isize;
-    let max_col = lines[1].chars().count() as isize;
+    let max_col = lines.first().unwrap().chars().count() as isize;
     let mut location_map: HashMap<char, Vec<Location>> = HashMap::new();
 
-    for (l_nr, line) in lines.iter().enumerate() {
-        for (c_nr, cha) in line.chars().enumerate() {
-            if cha != '.' {
-                location_map
-                    .entry(cha)
-                    .or_default()
-                    .push(Location::new_usize(l_nr, c_nr));
-            }
-        }
+    let antennas = lines
+        .iter()
+        .enumerate()
+        .flat_map(|(l_nr, line)| {
+            line.chars()
+                .enumerate()
+                .map(move |(c_nr, cha)| (l_nr, c_nr, cha))
+        })
+        .filter(|(l_nr, c_nr, cha)| *cha != '.');
+
+    for (l_nr, c_nr, cha) in antennas {
+        location_map
+            .entry(cha)
+            .or_default()
+            .push(Location::new_usize(l_nr, c_nr));
     }
 
     let mut antinode_locations: HashSet<Location> = HashSet::new();
 
-    let is_inside =
-        |loc: &Location| loc.row >= 0 && loc.row < max_line && loc.col >= 0 && loc.col < max_col;
+    let is_inside = |loc: &Location| {
+        loc.is_inside_bounding_box(
+            &Location::new(0, 0),
+            &Location::new(max_line - 1, max_col - 1),
+        )
+    };
 
     for (_, ant_locations) in location_map.iter() {
         let pairs = ant_locations.iter().cartesian_product(ant_locations.iter());
