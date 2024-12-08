@@ -1,79 +1,42 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use anyhow;
-use aoc23;
+use aoc24::{self, Location};
 use itertools::*;
 
-#[derive(Debug, Clone, Copy)]
-enum Instr {
-    Left,
-    Right,
-}
-
-impl Instr {
-    fn from_char(c: char) -> Self {
-        match c {
-            'L' => Instr::Left,
-            'R' => Instr::Right,
-            _ => panic!("Unknown Instr {}", c),
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-struct MapEntry {
-    left: String,
-    right: String,
-}
-
-impl MapEntry {
-    fn from_str(s: &str) -> Self {
-        let mut parts = s
-            .trim()
-            .trim_start_matches('(')
-            .trim_end_matches(')')
-            .split(',');
-        MapEntry {
-            left: parts.next().unwrap().trim().to_string(),
-            right: parts.next().unwrap().trim().to_string(),
-        }
-    }
-    fn select(&self, instr: Instr) -> &str {
-        match instr {
-            Instr::Left => self.left.as_str(),
-            Instr::Right => self.right.as_str(),
-        }
-    }
-}
-
 fn main() -> anyhow::Result<()> {
-    let mut lines = aoc23::read_input_lines();
-    let instructions = lines
-        .next()
-        .unwrap()
-        .trim()
-        .chars()
-        .map(Instr::from_char)
-        .collect_vec();
-    lines.next(); // empty
-    let map: HashMap<String, MapEntry> = lines
-        .map(|line| {
-            let mut parts = line.trim().split('=');
-            (
-                parts.next().unwrap().trim().to_string(),
-                MapEntry::from_str(parts.next().unwrap().trim()),
-            )
-        })
-        .collect();
-
-    let mut node = "AAA";
-    let mut steps = 0;
-    let mut iter = instructions.iter().cycle();
-    while node != "ZZZ" {
-        let instr = iter.next().unwrap();
-        node = map.get(node).unwrap().select(instr.clone());
-        steps += 1;
+    let lines = aoc24::read_input_lines().collect::<Vec<_>>();
+    let max_line = lines.len() as isize;
+    let max_col = lines[1].chars().count() as isize;
+    let mut location_map: HashMap<char, Vec<Location>> = HashMap::new();
+    for (l_nr, line) in lines.iter().enumerate() {
+        for (c_nr, cha) in line.chars().enumerate() {
+            if cha != '.' {
+                location_map
+                    .entry(cha)
+                    .or_default()
+                    .push(Location::new_usize(l_nr, c_nr));
+            }
+        }
     }
-    println!("{}", steps);
+
+    let mut antinode_locations: HashSet<Location> = HashSet::new();
+
+    for (ant_char, ant_locations) in location_map.iter() {
+        let pairs = ant_locations.iter().cartesian_product(ant_locations.iter());
+        for (loc1, loc2) in pairs.filter(|(l1, l2)| l1 != l2) {
+            let distance = loc2.distance(loc1);
+            antinode_locations.insert(loc1.apply_n_distance(&distance, -1));
+            antinode_locations.insert(loc1.apply_n_distance(&distance, 2));
+        }
+    }
+    println!(
+        "{}",
+        antinode_locations
+            .iter()
+            .filter(|loc| loc.row >= 0 && loc.row < max_line && loc.col >= 0 && loc.col < max_col)
+            .count()
+    );
+
     Ok(())
 }

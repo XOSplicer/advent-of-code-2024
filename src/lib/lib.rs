@@ -28,6 +28,12 @@ pub struct Location {
     pub col: isize,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Distance {
+    pub row: isize,
+    pub col: isize,
+}
+
 impl Location {
     /// Create a new location at (row, col)
     ///
@@ -166,6 +172,13 @@ impl Location {
         self.left()
     }
 
+    pub fn distance(&self, other: &Location) -> Distance {
+        Distance {
+            row: self.row - other.row,
+            col: self.col - other.col,
+        }
+    }
+
     /// Create a new location at one step in the given direction
     ///
     /// ```
@@ -200,6 +213,22 @@ impl Location {
             s = s.apply(dir);
         }
         s
+    }
+
+    #[inline(always)]
+    pub fn apply_distance(&self, dis: &Distance) -> Self {
+        Location {
+            row: self.row + dis.row,
+            col: self.col + dis.col,
+        }
+    }
+
+    #[inline(always)]
+    pub fn apply_n_distance(&self, dis: &Distance, n: isize) -> Self {
+        Location {
+            row: self.row + dis.row * n,
+            col: self.col + dis.col * n,
+        }
     }
 }
 
