@@ -1,13 +1,24 @@
 #[allow(dead_code)]
+use std::fs::read_to_string;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-pub fn read_input_lines() -> impl Iterator<Item = String> {
+pub fn input_file() -> String {
     let input_file = std::env::args()
         .skip(1)
         .next()
         .expect("Expected input FILE");
+    input_file
+}
+
+pub fn read_input_file() -> String {
+    let input_file = input_file();
+    read_to_string(input_file).expect("Could not read FILE")
+}
+
+pub fn read_input_lines() -> impl Iterator<Item = String> {
+    let input_file = input_file();
     let lines = BufReader::new(File::open(input_file).expect("Could not open FILE"))
         .lines()
         .map(|line| line.expect("Could not read line"));
@@ -255,10 +266,8 @@ impl Location {
     ///     &Location::new(1, 1), &Location::new(2, 2)));
     #[inline(always)]
     pub fn is_inside_bounding_box(&self, upper_left: &Location, lower_right: &Location) -> bool {
-        self.row >= upper_left.row
-            && self.row <= lower_right.row
-            && self.col >= upper_left.col
-            && self.col <= lower_right.col
+        (upper_left.row..=lower_right.row).contains(&self.row)
+            && (upper_left.col..=lower_right.col).contains(&self.col)
     }
 }
 
