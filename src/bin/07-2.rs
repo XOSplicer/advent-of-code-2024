@@ -9,8 +9,8 @@ fn op_mul(r: u64, n: u64) -> u64 {
     r * n
 }
 fn op_concat(r: u64, n: u64) -> u64 {
-    // TODO: use maths instead of string
-    format!("{}{}", r, n).parse().unwrap()
+    let m = 10_u64.pow((n as f64).log10().floor() as u32 + 1);
+    r * m + n
 }
 
 fn possible_results(list: &[u64]) -> Vec<u64> {
