@@ -16,7 +16,7 @@ regex = "1.11.1"
 # ndarray-linalg = { version = "0.16.0", features = ["openblas-system"]}
 # num = "0.4.1"
 # petgraph = "0.6.4"
-# rayon = "1.8.0"
+rayon = "1.8.0"
 
 # crossbeam = "0.8.2"
 # crossbeam-channel = "0.5.8"

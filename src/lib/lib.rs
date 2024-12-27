@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 #[allow(dead_code)]
 use std::fs::read_to_string;
 use std::fs::File;
@@ -33,7 +34,17 @@ pub fn read_file_lines(file: &str) -> impl Iterator<Item = String> {
     lines
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub fn read_visual_map(lines: impl Iterator<Item = String>) -> BTreeMap<Location, char> {
+    let mut res = BTreeMap::new();
+    for (row, line) in lines.enumerate() {
+        for (col, c) in line.chars().enumerate() {
+            res.insert(Location::new_usize(row, col), c);
+        }
+    }
+    res
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Location {
     pub row: isize,
     pub col: isize,
@@ -353,7 +364,7 @@ impl Into<Distance> for Direction {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Distance {
     pub row: isize,
     pub col: isize,
