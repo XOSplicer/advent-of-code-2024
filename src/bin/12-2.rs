@@ -13,6 +13,12 @@ struct Kernel3Input<'a, T> {
     inner: [[Option<&'a T>; 3]; 3],
 }
 
+impl<'a, T> Kernel3Input<'a, T> {
+    fn center(&self) -> &'a T {
+        self.inner[1][1].unwrap()
+    }
+}
+
 fn apply_kernel3_par<'a, T, F, U>(
     input: &'a BTreeMap<Location, T>,
     kernel: F,
@@ -48,6 +54,16 @@ where
             new_value.map(|v| (*loc, v))
         })
         .collect()
+}
+
+
+fn upper_left_outer_edge_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+        x o x
+        o c x
+        x x x
+     */
+    todo!()
 }
 
 fn left_edge_kernel(input: Kernel3Input<char>) -> Option<char> {
@@ -109,6 +125,7 @@ fn main() -> anyhow::Result<()> {
         }
         connected_locs.push(found);
     }
+
 
     println!("Number of regions: {}", connected_locs.len());
 
