@@ -34,14 +34,28 @@ pub fn read_file_lines(file: &str) -> impl Iterator<Item = String> {
     lines
 }
 
-pub fn read_visual_map(lines: impl Iterator<Item = String>) -> BTreeMap<Location, char> {
-    let mut res = BTreeMap::new();
+#[derive(Debug, Clone)]
+pub struct VisualMap {
+    pub map: BTreeMap<Location, char>,
+    pub max: Location
+}
+
+pub fn read_visual_map(lines: impl Iterator<Item = String>) -> VisualMap {
+    let mut map = BTreeMap::new();
+    let mut max = Location::new(0, 0);
     for (row, line) in lines.enumerate() {
         for (col, c) in line.chars().enumerate() {
-            res.insert(Location::new_usize(row, col), c);
+            let loc = Location::new_usize(row, col);
+            map.insert(loc, c);
+            if loc > max {
+                max = loc;
+            }
         }
     }
-    res
+    VisualMap {
+        map,
+        max
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
