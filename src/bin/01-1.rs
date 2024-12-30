@@ -1,4 +1,3 @@
-
 use anyhow;
 use aoc24::{self};
 

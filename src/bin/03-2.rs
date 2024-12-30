@@ -1,8 +1,5 @@
-use std::{collections::BTreeMap, fs::File, io::read_to_string};
-
 use anyhow;
 use aoc24::{self};
-use itertools::Itertools;
 use regex::Regex;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

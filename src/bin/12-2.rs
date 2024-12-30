@@ -1,10 +1,10 @@
 use std::{
-    collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet},
+    collections::{BTreeMap, BTreeSet, HashMap, HashSet},
     iter::once,
 };
 
 use anyhow;
-use aoc24::{self, read_visual_map, Direction, Distance, Location};
+use aoc24::{self, Distance, Location};
 use itertools::Itertools;
 use rayon::prelude::*;
 
@@ -206,11 +206,6 @@ fn main() -> anyhow::Result<()> {
         println!();
     }
      */
-
-    let areas_by_id: HashMap<usize, usize> = loc_by_id
-        .iter()
-        .map(|(&id, locs)| (id, locs.len()))
-        .collect();
     let areas_by_id = ids.values().cloned().counts();
     //dbg!(&areas_by_id);
 

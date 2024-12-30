@@ -35,27 +35,33 @@ pub fn read_file_lines(file: &str) -> impl Iterator<Item = String> {
 }
 
 #[derive(Debug, Clone)]
-pub struct VisualMap {
-    pub map: BTreeMap<Location, char>,
-    pub max: Location
+pub struct VisualMap<T> {
+    pub map: BTreeMap<Location, T>,
+    pub max: Location,
 }
 
-pub fn read_visual_map(lines: impl Iterator<Item = String>) -> VisualMap {
+pub fn read_visual_map(lines: impl Iterator<Item = String>) -> VisualMap<char> {
+    read_visual_map_filter_map(lines, |c| Some(c))
+}
+
+pub fn read_visual_map_filter_map<T>(
+    lines: impl Iterator<Item = String>,
+    f: impl Fn(char) -> Option<T>,
+) -> VisualMap<T> {
     let mut map = BTreeMap::new();
     let mut max = Location::new(0, 0);
     for (row, line) in lines.enumerate() {
         for (col, c) in line.chars().enumerate() {
             let loc = Location::new_usize(row, col);
-            map.insert(loc, c);
+            if let Some(v) = f(c) {
+                map.insert(loc, v);
+            }
             if loc > max {
                 max = loc;
             }
         }
     }
-    VisualMap {
-        map,
-        max
-    }
+    VisualMap { map, max }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

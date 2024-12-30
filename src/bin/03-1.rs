@@ -1,5 +1,3 @@
-use std::{fs::File, io::read_to_string};
-
 use anyhow;
 use aoc24::{self};
 use regex::Regex;
