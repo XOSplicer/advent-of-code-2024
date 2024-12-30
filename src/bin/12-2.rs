@@ -56,50 +56,112 @@ where
         .collect()
 }
 
-
-fn upper_left_outer_edge_kernel(input: Kernel3Input<char>) -> Option<char> {
+fn upper_left_outer_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
     /*
-        x o x
-        o c x
-        x x x
-     */
-    todo!()
+       x o x
+       o c x
+       x x x
+    */
+    if input.inner[0][1] != Some(input.center()) && input.inner[1][0] != Some(input.center()) {
+        return Some(*input.center());
+    }
+    None
 }
 
-fn left_edge_kernel(input: Kernel3Input<char>) -> Option<char> {
-    match (input.inner[1][0], input.inner[1][1]) {
-        (None, None) => None,
-        (None, Some(c)) => Some(*c),
-        (Some(_), None) => None,
-        (Some(o), Some(c)) => (o != c).then_some(*c),
+fn lower_left_outer_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+       x x x
+       o c x
+       x o x
+    */
+    if input.inner[2][1] != Some(input.center()) && input.inner[1][0] != Some(input.center()) {
+        return Some(*input.center());
     }
+    None
 }
 
-fn right_edge_kernel(input: Kernel3Input<char>) -> Option<char> {
-    match (input.inner[1][2], input.inner[1][1]) {
-        (None, None) => None,
-        (None, Some(c)) => Some(*c),
-        (Some(_), None) => None,
-        (Some(o), Some(c)) => (o != c).then_some(*c),
+fn upper_right_outer_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+       x o x
+       x c o
+       x x x
+    */
+    if input.inner[0][1] != Some(input.center()) && input.inner[1][2] != Some(input.center()) {
+        return Some(*input.center());
     }
+    None
 }
 
-fn upper_edge_kernel(input: Kernel3Input<char>) -> Option<char> {
-    match (input.inner[0][1], input.inner[1][1]) {
-        (None, None) => None,
-        (None, Some(c)) => Some(*c),
-        (Some(_), None) => None,
-        (Some(o), Some(c)) => (o != c).then_some(*c),
+fn lower_right_outer_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+       x x x
+       x c o
+       x o x
+    */
+    if input.inner[2][1] != Some(input.center()) && input.inner[1][2] != Some(input.center()) {
+        return Some(*input.center());
     }
+    None
 }
 
-fn lower_edge_kernel(input: Kernel3Input<char>) -> Option<char> {
-    match (input.inner[2][1], input.inner[1][1]) {
-        (None, None) => None,
-        (None, Some(c)) => Some(*c),
-        (Some(_), None) => None,
-        (Some(o), Some(c)) => (o != c).then_some(*c),
+fn upper_left_inner_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+       x x x
+       x c c
+       x c o
+    */
+    if input.inner[1][2] == Some(input.center())
+        && input.inner[2][1] == Some(input.center())
+        && input.inner[2][2] != Some(input.center())
+    {
+        return Some(*input.center());
     }
+    None
+}
+
+fn upper_right_inner_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+       x x x
+       c c x
+       o c x
+    */
+    if input.inner[1][0] == Some(input.center())
+        && input.inner[2][1] == Some(input.center())
+        && input.inner[2][0] != Some(input.center())
+    {
+        return Some(*input.center());
+    }
+    None
+}
+
+fn lower_right_inner_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+       o c x
+       c c x
+       x x x
+    */
+    if input.inner[0][1] == Some(input.center())
+        && input.inner[1][0] == Some(input.center())
+        && input.inner[0][0] != Some(input.center())
+    {
+        return Some(*input.center());
+    }
+    None
+}
+
+fn lower_left_inner_corner_kernel(input: Kernel3Input<char>) -> Option<char> {
+    /*
+       x c o
+       x c c
+       x x x
+    */
+    if input.inner[0][1] == Some(input.center())
+        && input.inner[1][2] == Some(input.center())
+        && input.inner[0][2] != Some(input.center())
+    {
+        return Some(*input.center());
+    }
+    None
 }
 
 fn main() -> anyhow::Result<()> {
@@ -125,7 +187,6 @@ fn main() -> anyhow::Result<()> {
         }
         connected_locs.push(found);
     }
-
 
     println!("Number of regions: {}", connected_locs.len());
 
@@ -153,33 +214,50 @@ fn main() -> anyhow::Result<()> {
     let areas_by_id = ids.values().cloned().counts();
     //dbg!(&areas_by_id);
 
-    let left_edges = apply_kernel3_par(&field.map, left_edge_kernel);
-    let right_edges = apply_kernel3_par(&field.map, right_edge_kernel);
-    let lower_edges = apply_kernel3_par(&field.map, lower_edge_kernel);
-    let upper_edges = apply_kernel3_par(&field.map, upper_edge_kernel);
+    let upper_left_outer_corners = apply_kernel3_par(&field.map, upper_left_outer_corner_kernel);
+    let upper_right_outer_corners = apply_kernel3_par(&field.map, upper_right_outer_corner_kernel);
+    let lower_left_outer_corners = apply_kernel3_par(&field.map, lower_left_outer_corner_kernel);
+    let lower_right_outer_corners = apply_kernel3_par(&field.map, lower_right_outer_corner_kernel);
+    let upper_left_inner_corners = apply_kernel3_par(&field.map, upper_left_inner_corner_kernel);
+    let upper_right_inner_corners = apply_kernel3_par(&field.map, upper_right_inner_corner_kernel);
+    let lower_left_inner_corners = apply_kernel3_par(&field.map, lower_left_inner_corner_kernel);
+    let lower_right_inner_corners = apply_kernel3_par(&field.map, lower_right_inner_corner_kernel);
 
-    let mut edge_count_by_id: HashMap<usize, usize> = HashMap::new();
+    let mut corner_count_by_id: HashMap<usize, usize> = HashMap::new();
     for loc in field.map.keys() {
         let id = ids.get(loc).unwrap().clone();
-        let edge_count = edge_count_by_id.entry(id).or_default();
-        if left_edges.get(loc).is_some() {
-            *edge_count += 1;
+        let corner_count = corner_count_by_id.entry(id).or_default();
+
+        if upper_left_outer_corners.get(loc).is_some() {
+            *corner_count += 1;
         }
-        if right_edges.get(loc).is_some() {
-            *edge_count += 1;
+        if upper_right_outer_corners.get(loc).is_some() {
+            *corner_count += 1;
         }
-        if lower_edges.get(loc).is_some() {
-            *edge_count += 1;
+        if lower_left_outer_corners.get(loc).is_some() {
+            *corner_count += 1;
         }
-        if upper_edges.get(loc).is_some() {
-            *edge_count += 1;
+        if lower_right_outer_corners.get(loc).is_some() {
+            *corner_count += 1;
+        }
+        if upper_left_inner_corners.get(loc).is_some() {
+            *corner_count += 1;
+        }
+        if upper_right_inner_corners.get(loc).is_some() {
+            *corner_count += 1;
+        }
+        if lower_left_inner_corners.get(loc).is_some() {
+            *corner_count += 1;
+        }
+        if lower_right_inner_corners.get(loc).is_some() {
+            *corner_count += 1;
         }
     }
-    //dbg!(&edge_count_by_id);
+    // dbg!(&corner_count_by_id);
 
     let res: u64 = areas_by_id
         .iter()
-        .map(|(&id, &area)| area as u64 * *edge_count_by_id.get(&id).unwrap() as u64)
+        .map(|(&id, &area)| area as u64 * *corner_count_by_id.get(&id).unwrap() as u64)
         .sum();
     println!("{}", res);
 
